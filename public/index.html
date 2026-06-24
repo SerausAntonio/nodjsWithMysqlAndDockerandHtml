@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Klanten</title>
+</head>
+<body>
+
+<h2>Klant toevoegen</h2>
+
+<input type="text" id="naam" placeholder="Naam">
+<button onclick="opslaan()">Opslaan</button>
+
+<h2>Klanten</h2>
+<button onclick="load()">Laad klanten</button>
+
+<ul id="lijst"></ul>
+
+<script>
+async function opslaan() {
+    const naam = document.getElementById('naam').value;
+
+    await fetch('/api/klanten', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ naam })
+    });
+
+    alert('Opgeslagen');
+}
+
+async function load() {
+    const res = await fetch('/api/klanten');
+    const data = await res.json();
+
+    const list = document.getElementById('lijst');
+    list.innerHTML = '';
+
+    data.forEach(k => {
+        const li = document.createElement('li');
+        li.textContent = k.naam;
+        list.appendChild(li);
+    });
+}
+</script>
+
+</body>
+</html>
